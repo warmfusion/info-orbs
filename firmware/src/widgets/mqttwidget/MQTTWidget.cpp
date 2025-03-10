@@ -412,7 +412,6 @@ void MQTTWidget::drawOrb(int orbid) {
         return;
     }
 
-
     if (orb->drawscript) {
         String script = orbDataMap[orb->topicSrc];
         DrawScript drawScript = DrawScript(m_manager);

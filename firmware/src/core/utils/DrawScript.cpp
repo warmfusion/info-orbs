@@ -1,6 +1,6 @@
 #include "DrawScript.h"
-#include <map>
 #include "Utils.h"
+#include <map>
 
 // Static command map definition
 const std::map<std::string, DrawScript::CommandType> DrawScript::commandMap = {
@@ -45,13 +45,13 @@ const std::map<std::string, DrawScript::CommandType> DrawScript::commandMap = {
     {"fbcol", COMMAND_FONT_BACK_COLOR},
 };
 
-DrawScript::DrawScript(ScreenManager & manager) : m_manager(manager) {
+DrawScript::DrawScript(ScreenManager &manager) : m_manager(manager) {
 }
 
 // Function to parse and execute a command
-void DrawScript::processDrawCommand(CommandType command, const std::vector<String>& p) {
+void DrawScript::processDrawCommand(CommandType command, const std::vector<String> &p) {
     int pc = p.size() - 1;
-    //printf(">>processing %s(%d) %d params\n", p[0], command, pc);
+    // printf(">>processing %s(%d) %d params\n", p[0], command, pc);
     switch (command) {
     case COMMAND_FILL:
         if (pc == 1) {
@@ -94,10 +94,10 @@ void DrawScript::processDrawCommand(CommandType command, const std::vector<Strin
         }
         break;
     case COMMAND_ARC:
-        if(pc == 7) {
+        if (pc == 7) {
             m_manager.drawArc(parseInt(p[1]), parseInt(p[2]), parseInt(p[3]), parseInt(p[4]), parseInt(p[5]), parseInt(p[6]), parseColor(p[7]), 0, false);
         } else if (pc == 8) {
-            m_manager.drawArc(parseInt(p[1]), parseInt(p[2]), parseInt(p[3]), parseInt(p[4]), parseInt(p[5]), parseInt(p[6]), parseColor(p[7]), parseColor(p[8]),true);
+            m_manager.drawArc(parseInt(p[1]), parseInt(p[2]), parseInt(p[3]), parseInt(p[4]), parseInt(p[5]), parseInt(p[6]), parseColor(p[7]), parseColor(p[8]), true);
         }
         break;
     case COMMAND_SMOOTH_ARC:
@@ -177,13 +177,14 @@ void DrawScript::processDrawCommand(CommandType command, const std::vector<Strin
 //    void drawString(const String &text, int x, int y, unsigned int fontSize, Align align, int32_t fgColor = -1, int32_t bgColor = -1, bool applyScale = true);
 
 // Function to process an entire script
-void DrawScript::processScript(const String& script) {
+void DrawScript::processScript(const String &script) {
     int lineStart = 0;
     int lineEnd;
 
     while (lineStart < script.length()) {
         lineEnd = script.indexOf('\n', lineStart);
-        if (lineEnd == -1) lineEnd = script.length();
+        if (lineEnd == -1)
+            lineEnd = script.length();
 
         String line = script.substring(lineStart, lineEnd);
         line.replace("\r", ""); // Handle Windows-style text
@@ -202,7 +203,7 @@ void DrawScript::processScript(const String& script) {
     }
 }
 // Helper functions for parameter extraction
-std::vector<String> DrawScript::parseLine(const String& line) {
+std::vector<String> DrawScript::parseLine(const String &line) {
     std::vector<String> tokens;
     String currentToken;
     bool escape = false;
@@ -230,11 +231,11 @@ std::vector<String> DrawScript::parseLine(const String& line) {
     return tokens;
 }
 
-int DrawScript::parseInt(const String& p) {
+int DrawScript::parseInt(const String &p) {
     int result;
-    if(p.startsWith("y") || p.startsWith("t")) {
+    if (p.startsWith("y") || p.startsWith("t")) {
         result = 1;
-    } else if(p.startsWith("n") || p.startsWith("f")) {
+    } else if (p.startsWith("n") || p.startsWith("f")) {
         result = 0;
     } else {
         result = strtol(p.c_str(), nullptr, 0);
@@ -242,18 +243,18 @@ int DrawScript::parseInt(const String& p) {
     return result;
 }
 
-TTF_Font DrawScript::parseFont(const String& name) {
+TTF_Font DrawScript::parseFont(const String &name) {
     TTF_Font fval = DEFAULT_FONT;
-    if(name.startsWith("r")) {
+    if (name.startsWith("r")) {
         fval = ROBOTO_REGULAR;
-    }else if(name.startsWith("f")) {
+    } else if (name.startsWith("f")) {
         fval = FINAL_FRONTIER;
-    } else if(name == "dseg7") {
+    } else if (name == "dseg7") {
         fval = DSEG7;
-    } else if(name == "dseg14") {
+    } else if (name == "dseg14") {
         fval = DSEG14;
     }
- //   Serial.printf("font name '%s' = %d\n",name.c_str(), fval);
+    //   Serial.printf("font name '%s' = %d\n",name.c_str(), fval);
     return fval;
 }
 
@@ -273,7 +274,7 @@ int DrawScript::parseColor(const String &p) {
             value = r | g | b;
         }
     }
-   // Serial.printf("color value=%x\n", value);
+    // Serial.printf("color value=%x\n", value);
     return value;
 }
 
@@ -289,14 +290,13 @@ static const std::map<const std::string, const Align> alignStringsMap = {
     {"mr", Align::MiddleRight},
     {"bl", Align::BottomLeft},
     {"bc", Align::BottomCenter},
-    {"br", Align::BottomRight}
-};
-Align DrawScript::parseAlign(const String& p) {
+    {"br", Align::BottomRight}};
+Align DrawScript::parseAlign(const String &p) {
     Align val = Align::MiddleCenter;
     auto it = alignStringsMap.find(p.c_str());
-    if ( it != alignStringsMap.end()) {
+    if (it != alignStringsMap.end()) {
         val = it->second;
     }
-   // Serial.printf("align value=%d\n", val);
+    // Serial.printf("align value=%d\n", val);
     return val;
 }
