@@ -49,6 +49,24 @@ void setup() {
     wifiManager = new OrbsWiFiManager();
     config = new ConfigManager(*wifiManager);
     sm = new ScreenManager(tft);
+    sm->fillAllScreens(TFT_BLACK);
+    sm->setFontColor(TFT_WHITE);
+
+    sm->selectScreen(0);
+    sm->drawCentreString("Welcome", ScreenCenterX, ScreenCenterY, 29);
+
+    sm->selectScreen(1);
+    sm->drawCentreString("Info Orbs", ScreenCenterX, ScreenCenterY - 50, 22);
+    sm->drawCentreString("by", ScreenCenterX, ScreenCenterY - 5, 22);
+    sm->drawCentreString("brett.tech", ScreenCenterX, ScreenCenterY + 30, 22);
+    sm->setFontColor(TFT_RED);
+    sm->drawCentreString("version: 1.1.0", ScreenCenterX, ScreenCenterY + 65, 14);
+
+    sm->selectScreen(2);
+
+    TJpgDec.setJpgScale(1);
+    TJpgDec.drawJpg(0, 0, logo_start, logo_end - logo_start);
+
     widgetSet = new WidgetSet(sm);
 
     // Pass references to MainHelper
