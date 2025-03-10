@@ -1,8 +1,8 @@
 #ifndef DRAWSCRIPT_H
 #define DRAWSCRIPT_H
 #include "ScreenManager.h"
-#include <vector>
 #include <map>
+#include <vector>
 
 class DrawScript {
 public:
@@ -12,8 +12,7 @@ public:
      * @param manager Reference to the ScreenManager.
      */
     DrawScript(ScreenManager &manager);
-    void processScript(const String& script);
-
+    void processScript(const String &script);
 
 private:
     ScreenManager &m_manager;
